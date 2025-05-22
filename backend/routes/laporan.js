@@ -4,8 +4,8 @@ const { submitLaporan } = require('../controllers/laporanController');
 
 const router = express.Router();
 
-// Setup multer untuk menyimpan file sementara di folder 'uploads'
-const upload = multer({ dest: 'uploads/' });
+// Simpan file langsung di memory (buffer), bukan di disk
+const upload = multer({ storage: multer.memoryStorage() });
 
 // POST endpoint untuk menerima laporan
 router.post('/laporan', upload.single('bukti'), submitLaporan);

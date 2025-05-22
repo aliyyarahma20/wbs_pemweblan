@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/style.css';
+import axios from 'axios'; 
 
 function FormLaporan() {
   const [formData, setFormData] = useState({
@@ -23,12 +24,52 @@ function FormLaporan() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formPayload = new FormData();
+  formPayload.append('kategori', formData.kategori);
+  formPayload.append('judul', formData.judul);
+  formPayload.append('isi', formData.isi);
+  formPayload.append('bukti', formData.bukti); // file
+  formPayload.append('tanggal', formData.tanggal);
+  formPayload.append('lokasi', formData.lokasi);
+  formPayload.append('anonim', formData.anonim);
+
+  // Jika bukan anonim, kirim nama dan kontak
+  if (!formData.anonim) {
+    formPayload.append('nama', formData.nama);
+    formPayload.append('kontak', formData.kontak);
+  }
+
+  try {
+    const response = await axios.post('http://localhost:3001/laporan', formPayload, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
     alert("Laporan Anda telah diterima, terima kasih sudah melapor.");
-    // TODO: Implement backend submission (fetch/axios)
-    console.log(formData);
-  };
+    console.log(response.data);
+
+    // Reset form setelah berhasil
+    setFormData({
+      kategori: '',
+      judul: '',
+      isi: '',
+      bukti: null,
+      tanggal: '',
+      lokasi: '',
+      anonim: false,
+      nama: '',
+      kontak: '',
+    });
+
+  } catch (error) {
+    console.error('Gagal mengirim laporan:', error);
+    alert("Terjadi kesalahan saat mengirim laporan.");
+  }
+};
 
   return (
     <div className="container mt-5">

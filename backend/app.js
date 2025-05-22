@@ -23,6 +23,11 @@ app.post('/api/login', (req, res) => {
     }
 });
 
+// Endpoint untuk mengupload laporan
+const laporanRoutes = require('./routes/laporan');
+app.use('/', laporanRoutes);
+
+
 app.listen(PORT, () => {
     console.log(`🚀 Backend berjalan di http://localhost:${PORT}`);
 });
