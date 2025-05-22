@@ -8,10 +8,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/" element={<h1>Welcome to WBS App</h1>} />
+        <Route path="/" element={<User />} />
       </Routes>
     </Router>
   );
