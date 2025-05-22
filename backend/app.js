@@ -1,15 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const fs = require('fs');
+const bodyParser = require('body-parser');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = 3001;
 
-// Route contoh
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Halo dari backend Express.js!' });
+app.use(cors());
+app.use(bodyParser.json());
+
+// Endpoint login admin
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+    
+    const rawData = fs.readFileSync('./credentials.json');
+    const credentials = JSON.parse(rawData);
+
+    if (username === credentials.username && password === credentials.password) {
+        res.status(200).json({ success: true, message: 'Login berhasil' });
+    } else {
+        res.status(401).json({ success: false, message: 'Username atau password salah' });
+    }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Backend berjalan di http://localhost:${PORT}`);
+});
