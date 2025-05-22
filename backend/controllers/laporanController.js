@@ -1,48 +1,43 @@
-const db = require('../config/db');
-const fs = require('fs');
-const path = require('path');
+const db = require('../config/db'); // asumsi kamu pakai file ini untuk koneksi db
+const CryptoJS = require('crypto-js');
 
-exports.submitLaporan = async (req, res) => {
-try {
+exports.kirimLaporan = async (req, res) => {
+  try {
     const {
-    kategori, judul, isi, tanggal, lokasi, nama, kontak, anonim
+      kategori, judul, isi, tanggal, lokasi, nama, kontak, anonim
     } = req.body;
 
-    const file = req.file;
+    const bukti = req.file;
 
-    if (!file) {
-    return res.status(400).json({ error: 'Bukti pendukung wajib diunggah.' });
-    }
+    if (!bukti) return res.status(400).json({ message: 'Bukti tidak ditemukan' });
 
-    // Baca isi file (buffer) dari path sementara
-    const buktiBuffer = fs.readFileSync(file.path);
+    // Enkripsi file bukti (gunakan kunci simpanan)
+    const key = process.env.AES_KEY || 'kunci_rahasia';
+    const encryptedBukti = CryptoJS.AES.encrypt(bukti.buffer.toString('base64'), key).toString();
 
-    // Hapus file sementara dari folder uploads setelah dibaca
-    fs.unlink(file.path, (err) => {
-    if (err) console.warn('Gagal hapus file sementara:', err);
-    });
+    // Masukkan data ke database
+    const sql = `
+      INSERT INTO laporan (kategori, judul, isi, tanggal, lokasi, nama, kontak, anonim, bukti, bukti_mime)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+      kategori,
+      judul,
+      isi,
+      tanggal,
+      lokasi || '',
+      anonim === 'true' ? null : nama,
+      anonim === 'true' ? null : kontak,
+      anonim === 'true',
+      encryptedBukti,
+      bukti.mimetype
+    ];
 
-    // Simpan ke DB
-    await db.query(`
-    INSERT INTO laporan 
-    (kategori, judul, isi, bukti, tanggal, lokasi, nama, kontak, anonim) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-    kategori,
-    judul,
-    isi,
-    buktiBuffer,
-    tanggal,
-    lokasi || '',
-    nama || null,
-    kontak || null,
-    anonim ? 1 : 0
-    ]);
+    await db.execute(sql, values);
 
-    res.status(201).json({ message: 'Laporan berhasil disimpan.' });
-
-} catch (err) {
-    console.error('Gagal simpan laporan:', err);
-    res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
-}
+    res.status(200).json({ message: 'Laporan berhasil dikirim' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Gagal mengirim laporan' });
+  }
 };

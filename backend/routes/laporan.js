@@ -1,13 +1,13 @@
 const express = require('express');
-const multer = require('multer');
-const { submitLaporan } = require('../controllers/laporanController');
-
 const router = express.Router();
+const laporanController = require('../controllers/laporanController');
+const multer = require('multer');
 
-// Setup multer untuk menyimpan file sementara di folder 'uploads'
-const upload = multer({ dest: 'uploads/' });
+// Setup multer memory storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-// POST endpoint untuk menerima laporan
-router.post('/laporan', upload.single('bukti'), submitLaporan);
+// Route untuk menerima form data
+router.post('/', upload.single('bukti'), laporanController.kirimLaporan);
 
 module.exports = router;

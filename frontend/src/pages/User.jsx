@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../public/css/style.css';
+import '../assets/css/style.css';
 
 const User = () => {
   const [formData, setFormData] = useState({
