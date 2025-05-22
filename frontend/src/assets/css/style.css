@@ -4,6 +4,17 @@ body {
     color: #0a1f44;
 }
 
+html, body {
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.container {
+  padding-bottom: 2rem;
+}
+
 h2 {
     color: #004080;
     margin-bottom: 10px;
