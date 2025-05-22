@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,7 +21,7 @@ const AdminLogin = () => {
 
     if (data.success) {
       alert('Login berhasil!');
-      navigate('/admin-dashboard');
+      window.location.href = '/admin-dashboard'; // ← navigasi manual
     } else {
       setError(data.message);
     }
