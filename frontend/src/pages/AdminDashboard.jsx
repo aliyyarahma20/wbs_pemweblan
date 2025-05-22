@@ -1,5 +1,6 @@
 import React from 'react';
-import './assets/dashboard_admin.css';
+import '../assets/css/AdminDashboard.css';
+
 
 const AdminDashboard = ({ total, dikaji, diselidiki, selesai, laporanBaru }) => {
   return (
