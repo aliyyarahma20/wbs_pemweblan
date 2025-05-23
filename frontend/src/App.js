@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import User from './pages/User';
+import LaporanList from './pages/Laporan_list'; // ✅ import baru
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/laporan_list" element={<LaporanList />} /> {/* ✅ route baru */}
         <Route path="/" element={<User />} />
       </Routes>
     </Router>
