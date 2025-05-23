@@ -57,7 +57,7 @@ const AdminDashboard = () => {
         </div>
         
         <nav className="sidebar-nav">
-          <a href="./admin_dashboard" className="active">
+          <a href="./admin-dashboard" className="active">
             <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <rect x="3" y="3" width="7" height="7"/>
               <rect x="14" y="3" width="7" height="7"/>

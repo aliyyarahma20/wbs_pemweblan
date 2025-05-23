@@ -7,7 +7,7 @@ const LaporanList = () => {
 
   useEffect(() => {
     // Ambil data laporan dari backend
-    axios.get("http://localhost:3001/api/laporan")
+    axios.get("http://localhost:3001/laporan")
       .then(res => setLaporan(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -31,7 +31,7 @@ const LaporanList = () => {
     <div className="d-flex">
       <div className="sidebar">
         <img src="/images/logo-admin.png" alt="Logo" className="sidebar-logo" />
-        <a href="/admin_dashboard">Dashboard</a>
+        <a href="/admin-dashboard">Dashboard</a>
         <a href="/laporan_list" className="active">Daftar Laporan</a>
         <a href="/login">Logout</a>
       </div>
@@ -54,7 +54,14 @@ const LaporanList = () => {
               {laporan.map((row, index) => (
                 <tr key={row.id}>
                   <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{row.tanggal}</td>
+                  <td className="text-center">
+                    {new Date(row.tanggal).toLocaleDateString('id-ID', {
+                      timeZone: 'Asia/Jakarta',
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </td>
                   <td className="text-center">{row.kategori}</td>
                   <td className="text-center">
                     <select
