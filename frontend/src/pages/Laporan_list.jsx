@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../assets/css/laporan_list.css"; // Import CSS file
+import { useNavigate } from "react-router-dom"; // ✅ Tambah import
 
 const LaporanList = () => {
   const [laporan, setLaporan] = useState([]);
+  const navigate = useNavigate(); // ✅ Hook navigate
 
   useEffect(() => {
-    // Ambil data laporan dari backend
     axios.get("http://localhost:3001/laporan")
       .then(res => setLaporan(res.data))
       .catch(err => console.error(err));
@@ -15,7 +16,6 @@ const LaporanList = () => {
   const handleStatusChange = async (id, status) => {
     try {
       await axios.post(`http://localhost:3001/api/laporan/${id}/status`, { status });
-      // Refresh data
       const res = await axios.get("http://localhost:3001/api/laporan");
       setLaporan(res.data);
     } catch (err) {
@@ -24,7 +24,7 @@ const LaporanList = () => {
   };
 
   const handlePrint = (id) => {
-    window.open(`http://localhost:3001/api/laporan/${id}/print`, '_blank');
+    navigate(`/LaporanDetail/${id}`); 
   };
 
   return (

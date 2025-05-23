@@ -4,6 +4,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import User from './pages/User';
 import LaporanList from './pages/Laporan_list'; // ✅ import baru
+import LaporanDetail from './pages/LaporanDetail';  // ✅ Detail laporan (baru kamu buat)
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/laporan_list" element={<LaporanList />} /> {/* ✅ route baru */}
+        <Route path="/LaporanDetail/:id" element={<LaporanDetail />} /> {/* ✅ Route baru */}
         <Route path="/" element={<User />} />
       </Routes>
     </Router>
