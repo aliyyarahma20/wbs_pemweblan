@@ -1,41 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../assets/css/AdminDashboard.css';
 
-const AdminDashboard = ({ 
-  total = 125, 
-  dikaji = 15, 
-  diselidiki = 35, 
-  selesai = 75, 
-  laporanBaru = [
-    {
-      judul: "Kerusakan Jalan di Jl. Sudirman",
-      kategori: "Infrastruktur",
-      tanggal: "2024-05-20",
-      lokasi: "Jl. Sudirman No. 123",
-      nama: "Ahmad Rizki",
-      anonim: false,
-      prioritas: "tinggi"
-    },
-    {
-      judul: "Pencemaran Lingkungan di Kali Brantas",
-      kategori: "Lingkungan",
-      tanggal: "2024-05-19",
-      lokasi: "Kali Brantas, Malang",
-      nama: "Anonim",
-      anonim: true,
-      prioritas: "sedang"
-    },
-    {
-      judul: "Pelayanan Publik Buruk di Kelurahan",
-      kategori: "Pelayanan Publik",
-      tanggal: "2024-05-18",
-      lokasi: "Kelurahan Dinoyo",
-      nama: "Sari Dewi",
-      anonim: false,
-      prioritas: "rendah"
-    }
-  ]
-}) => {
+const AdminDashboard = () => {
+  const [laporanBaru, setLaporanBaru] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [dikaji, setDikaji] = useState(0);
+  const [diselidiki, setDiselidiki] = useState(0);
+  const [selesai, setSelesai] = useState(0);
+
+  useEffect(() => {
+  axios.get('http://localhost:3001/laporan')
+    .then((res) => {
+      const data = res.data;
+      setLaporanBaru(data);
+      setTotal(data.length);
+      setDikaji(data.filter(l => l.status === 'dikaji').length);
+      setDiselidiki(data.filter(l => l.status === 'diselidiki').length);
+      setSelesai(data.filter(l => l.status === 'selesai').length);
+    })
+    .catch((err) => {
+      console.error("Gagal ambil laporan:", err);
+    });
+}, []);
+
   
   const getCurrentDate = () => {
     const today = new Date();
@@ -54,7 +42,7 @@ const AdminDashboard = ({
   const getPriorityDotClass = (prioritas) => {
     return `dot-${prioritas}`;
   };
-
+  
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -208,53 +196,42 @@ const AdminDashboard = ({
             </div>
             
             <div className="inbox-content">
-              {laporanBaru && laporanBaru.length > 0 ? (
-                laporanBaru.map((laporan, index) => (
-                  <div className="laporan" key={index}>
-                    <div className="laporan-header">
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              {laporanBaru.filter(laporan => laporan.status === 'dikaji').length > 0 ? (
+                laporanBaru
+                  .filter(laporan => laporan.status === 'dikaji')
+                  .map((laporan, index) => (
+                    <div className="laporan" key={index}>
+                      <div className="laporan-header">
+                        <div style={{ flex: 1 }}>
                           <h4 className="laporan-title">{laporan.judul}</h4>
-                          <span className={`priority-badge ${getPriorityClass(laporan.prioritas)}`}>
-                            {laporan.prioritas}
-                          </span>
-                        </div>
-                        
-                        <div className="laporan-meta">
-                          <div className="meta-item">
-                            <span className="category-badge">{laporan.kategori}</span>
-                          </div>
-                          <div className="meta-item">
-                            📅 {laporan.tanggal}
-                          </div>
-                        </div>
-                        
-                        <div className="laporan-meta">
-                          <div className="meta-item">
-                            📍 {laporan.lokasi}
-                          </div>
-                          <div className="meta-item">
-                            👤 {laporan.anonim ? 'Anonim' : laporan.nama}
+                          <p>Status: <strong>{laporan.status || 'Belum Ada'}</strong></p>
+                          
+                          <div className="laporan-meta">
+                            <div className="meta-item">📅 {new Date(laporan.tanggal).toLocaleDateString('id-ID', {
+                                timeZone: 'Asia/Jakarta',
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                              })}
+                            </div>
+
+                            <div className="meta-item">📍 {laporan.lokasi}</div>
+                            <div className="meta-item">
+                              👤 {laporan.anonim === '1' || laporan.anonim === 1 ? 'Anonim' : laporan.nama}
+                            </div>
+
                           </div>
                         </div>
-                      </div>
-                      
-                      <div className="laporan-actions">
-                        <div className={`priority-dot ${getPriorityDotClass(laporan.prioritas)}`}></div>
-                        <button className="btn-review">
-                          Tinjau
-                        </button>
+                        <div className="laporan-actions">
+                          <button className="btn-review">Tinjau</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <div className="empty-state">
-                  <div className="empty-icon">
-                    📄
-                  </div>
-                  <p className="empty-title">Tidak ada laporan baru</p>
-                  <p className="empty-subtitle">Semua laporan telah ditinjau</p>
+                  <div className="empty-icon">📄</div>
+                  <p className="empty-title">Tidak ada laporan</p>
                 </div>
               )}
             </div>
