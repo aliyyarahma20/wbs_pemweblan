@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../assets/css/AdminDashboard.css';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"; 
 
 
 const AdminDashboard = () => {
@@ -43,6 +44,11 @@ const AdminDashboard = () => {
 
   const getPriorityDotClass = (prioritas) => {
     return `dot-${prioritas}`;
+  };
+  
+  const navigate = useNavigate();
+  const handlePrint = (id) => {
+    navigate(`/LaporanDetail/${id}`); 
   };
   
   return (
@@ -237,7 +243,7 @@ const AdminDashboard = () => {
 
                           </div>
                         </div>
-                        <div className="laporan-actions">
+                        <div className="laporan-actions" onClick={() => handlePrint(laporan.id)}>
                           <button className="btn-review">Tinjau</button>
                         </div>
                       </div>

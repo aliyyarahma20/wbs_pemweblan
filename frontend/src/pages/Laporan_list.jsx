@@ -137,7 +137,9 @@ const LaporanList = () => {
                   </td>
                   <td className="text-center">
                     <button type="button" className="print-button" onClick={() => handlePrint(row.id)}>
-                      <i className="fas fa-print"></i> Print
+                      <svg style={{width: '16px', height: '16px', marginRight: '8px'}} fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7.828A2 2 0 0017.414 7L13 2.586A2 2 0 0011.586 2H4zm9 1.414L16.586 7H13a1 1 0 01-1-1V3.414z" />
+                      </svg> Detail
                     </button>
                   </td>
 
