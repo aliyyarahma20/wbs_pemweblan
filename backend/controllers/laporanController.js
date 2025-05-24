@@ -82,3 +82,77 @@ exports.getAllLaporan = async (req, res) => {
     res.status(500).json({ error: 'Terjadi kesalahan saat mengambil laporan.' });
   }
 };
+
+
+exports.updateStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  console.log(`UpdateStatus request id=${id} status=${status}`); // debug
+
+  if (!['dikaji', 'diselidiki', 'selesai'].includes(status)) {
+    return res.status(400).json({ error: 'Status tidak valid.' });
+  }
+
+  try {
+    const [existing] = await db.query(
+      'SELECT * FROM status_kasus WHERE id_laporan = ?',
+      [id]
+    );
+
+    if (existing.length > 0) {
+      await db.query(
+        'UPDATE status_kasus SET status = ?, updated_at = NOW() WHERE id_laporan = ?',
+        [status, id]
+      );
+    } else {
+      await db.query(
+        'INSERT INTO status_kasus (id_laporan, status) VALUES (?, ?)',
+        [id, status]
+      );
+    }
+
+    res.json({ message: 'Status berhasil diperbarui.' });
+  } catch (err) {
+    console.error('Gagal update status:', err);
+    res.status(500).json({ error: 'Terjadi kesalahan saat memperbarui status.' });
+  }
+};
+
+
+exports.getLaporanById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await db.query(`
+      SELECT 
+        laporan.id,
+        laporan.kategori,
+        laporan.judul,
+        laporan.isi,
+        laporan.tanggal,
+        laporan.lokasi,
+        IF(laporan.anonim = 1, 'Anonim', laporan.nama) AS nama,
+        laporan.anonim,
+        status.status,
+        laporan.bukti
+      FROM laporan
+      LEFT JOIN status_kasus AS status ON status.id_laporan = laporan.id
+      WHERE laporan.id = ?
+    `, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Laporan tidak ditemukan' });
+    }
+
+    const laporan = rows[0];
+    // Buat URL base64 untuk gambar bukti
+    const gambarUrl = `data:image/jpeg;base64,${laporan.bukti.toString('base64')}`;
+    delete laporan.bukti;
+    laporan.gambarUrl = gambarUrl;
+
+    res.json(laporan);
+  } catch (err) {
+    console.error('Gagal mengambil detail laporan:', err);
+    res.status(500).json({ error: 'Terjadi kesalahan saat mengambil laporan.' });
+  }
+};

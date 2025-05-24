@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../assets/css/AdminDashboard.css';
 import { Link } from 'react-router-dom';
 
+
 const AdminDashboard = () => {
   const [laporanBaru, setLaporanBaru] = useState([]);
   const [total, setTotal] = useState(0);
@@ -50,7 +51,12 @@ const AdminDashboard = () => {
       <div className="sidebar">
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            📊
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
           </div>
           <div className="sidebar-title">Admin Panel</div>
           <div className="sidebar-subtitle">Dashboard</div>
@@ -77,20 +83,10 @@ const AdminDashboard = () => {
             </svg>
             Daftar Laporan
             </Link>
-
-          <a href="#">
-            <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-            Manajemen User
-          </a>
         </nav>
         
         <div className="sidebar-logout">
-          <a href="./login">
+          <a href="./admin">
             <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16,17 21,12 16,7"/>
@@ -128,12 +124,14 @@ const AdminDashboard = () => {
                   <p>{total}</p>
                 </div>
                 <div className="card-icon">
-                  📄
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
+                  </svg>
                 </div>
-              </div>
-              <div className="card-trend">
-                <span className="trend-up">↗ +12%</span>
-                <span className="trend-text">dari bulan lalu</span>
               </div>
             </div>
 
@@ -144,12 +142,11 @@ const AdminDashboard = () => {
                   <p>{dikaji}</p>
                 </div>
                 <div className="card-icon">
-                  🕐
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                  </svg>
                 </div>
-              </div>
-              <div className="card-trend">
-                <span className="trend-up">↗ +8%</span>
-                <span className="trend-text">dari bulan lalu</span>
               </div>
             </div>
 
@@ -160,12 +157,11 @@ const AdminDashboard = () => {
                   <p>{diselidiki}</p>
                 </div>
                 <div className="card-icon">
-                  👁️
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
                 </div>
-              </div>
-              <div className="card-trend">
-                <span className="trend-up">↗ +15%</span>
-                <span className="trend-text">dari bulan lalu</span>
               </div>
             </div>
 
@@ -176,12 +172,10 @@ const AdminDashboard = () => {
                   <p>{selesai}</p>
                 </div>
                 <div className="card-icon">
-                  ✅
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
                 </div>
-              </div>
-              <div className="card-trend">
-                <span className="trend-up">↗ +22%</span>
-                <span className="trend-text">dari bulan lalu</span>
               </div>
             </div>
           </div>
@@ -190,7 +184,7 @@ const AdminDashboard = () => {
           <div className="inbox">
             <div className="inbox-header">
               <div>
-                <h3 className="inbox-title">Laporan Baru (Status: Dikaji)</h3>
+                <h3 className="inbox-title">Laporan Baru</h3>
                 <p className="inbox-subtitle">Laporan yang perlu ditinjau segera</p>
               </div>
               <span className="inbox-badge">
@@ -210,7 +204,14 @@ const AdminDashboard = () => {
                           <p>Status: <strong>{laporan.status || 'Belum Ada'}</strong></p>
                           
                           <div className="laporan-meta">
-                            <div className="meta-item">📅 {new Date(laporan.tanggal).toLocaleDateString('id-ID', {
+                            <div className="meta-item">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                              </svg>
+                              {new Date(laporan.tanggal).toLocaleDateString('id-ID', {
                                 timeZone: 'Asia/Jakarta',
                                 day: 'numeric',
                                 month: 'long',
@@ -218,9 +219,20 @@ const AdminDashboard = () => {
                               })}
                             </div>
 
-                            <div className="meta-item">📍 {laporan.lokasi}</div>
                             <div className="meta-item">
-                              👤 {laporan.anonim === '1' || laporan.anonim === 1 ? 'Anonim' : laporan.nama}
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                              </svg>
+                              {laporan.lokasi}
+                            </div>
+
+                            <div className="meta-item">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                              </svg>
+                              {laporan.anonim === '1' || laporan.anonim === 1 ? 'Anonim' : laporan.nama}
                             </div>
 
                           </div>
@@ -233,7 +245,15 @@ const AdminDashboard = () => {
                   ))
               ) : (
                 <div className="empty-state">
-                  <div className="empty-icon">📄</div>
+                  <div className="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14,2 14,8 20,8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                  </div>
                   <p className="empty-title">Tidak ada laporan</p>
                 </div>
               )}

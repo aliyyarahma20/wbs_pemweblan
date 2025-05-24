@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 import '../assets/css/LaporanDetail.css';
 
 const LaporanDetail = () => {
   const { id } = useParams();
+  const [laporan, setLaporan]= useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const laporanDummy = {
-    id,
-    tanggal: "2025-05-23",
-    kategori: "Pelayanan",
-    status: "dikaji",
-    judul: "Laporan Dummy Judul",
-    isi: "Ini adalah isi laporan dummy yang ditampilkan di halaman detail. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    pelapor: "Nama Pelapor Dummy",
-    gambarUrl: "/images/dummy-image.jpg",
-  };
+    useEffect(() => {
+    const fetchLaporan = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/laporan/${id}`); // ganti URL jika beda
+        setLaporan(res.data);
+      } catch (err) {
+        setError("Gagal mengambil data laporan");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLaporan();
+  }, [id]);
+
 
   // Fungsi download gambar
   const handleDownloadGambar = () => {
     const link = document.createElement("a");
-    link.href = laporanDummy.gambarUrl;
+    link.href = laporan.gambarUrl;
     link.download = `gambar_laporan_${id}.jpg`;
     document.body.appendChild(link);
     link.click();
@@ -55,24 +65,26 @@ const LaporanDetail = () => {
         return 'status-dikaji';
     }
   };
-
-  return (
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!laporan) return <div>Data laporan tidak ditemukan</div>;
+    return (
     <div className="container">
       {/* Header Section */}
       <div className="header-section">
         <h2>Detail Laporan</h2>
-        <div className="report-id">ID: {laporanDummy.id}</div>
+        <div className="report-id">ID: {laporan.id }</div>
       </div>
 
       {/* Content Section */}
       <div className="content-section">
         {/* Status Badge */}
         <div className="status-container">
-          <div className={`status-badge ${getStatusClass(laporanDummy.status)}`}>
+          <div className={`status-badge ${getStatusClass(laporan.status)}`}>
             <svg className="icon" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            Status: {laporanDummy.status}
+            Status: {laporan.status}
           </div>
         </div>
 
@@ -85,7 +97,7 @@ const LaporanDetail = () => {
               </svg>
               Tanggal Laporan
             </div>
-            <div className="value">{formatDate(laporanDummy.tanggal)}</div>
+            <div className="value">{formatDate(laporan.tanggal)}</div>
           </div>
 
           <div className="detail-card">
@@ -95,7 +107,7 @@ const LaporanDetail = () => {
               </svg>
               Kategori
             </div>
-            <div className="value">{laporanDummy.kategori}</div>
+            <div className="value">{laporan.kategori}</div>
           </div>
 
           <div className="detail-card">
@@ -105,7 +117,7 @@ const LaporanDetail = () => {
               </svg>
               Pelapor
             </div>
-            <div className="value">{laporanDummy.pelapor}</div>
+            <div className="value">{laporan.nama ?? '-'}</div>
           </div>
 
           <div className="detail-card">
@@ -115,7 +127,7 @@ const LaporanDetail = () => {
               </svg>
               Judul Laporan
             </div>
-            <div className="value">{laporanDummy.judul}</div>
+            <div className="value">{laporan.judul}</div>
           </div>
         </div>
 
@@ -127,7 +139,7 @@ const LaporanDetail = () => {
             </svg>
             Isi Laporan
           </div>
-          <div className="value">{laporanDummy.isi}</div>
+          <div className="value">{laporan.isi}</div>
         </div>
 
         {/* Image Card */}
@@ -139,7 +151,7 @@ const LaporanDetail = () => {
             Gambar Laporan
           </div>
           <img 
-            src={laporanDummy.gambarUrl} 
+            src={laporan.gambarUrl} 
             alt="Gambar Laporan" 
             className="image-preview"
             onError={(e) => {

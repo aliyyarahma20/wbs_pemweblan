@@ -1,27 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../assets/css/laporan_list.css"; // Import CSS file
-import { useNavigate } from "react-router-dom"; // ✅ Tambah import
+import { useNavigate } from "react-router-dom"; 
+import { Link } from 'react-router-dom';
 
 const LaporanList = () => {
   const [laporan, setLaporan] = useState([]);
   const navigate = useNavigate(); // ✅ Hook navigate
 
   useEffect(() => {
-    axios.get("http://localhost:3001/laporan")
-      .then(res => setLaporan(res.data))
-      .catch(err => console.error(err));
-  }, []);
+  axios.get("http://localhost:3001/laporan")
+    .then(res => {
+      // Sort agar yang status selesai di bawah
+      const sortedData = res.data.sort((a, b) => {
+        if (a.status === 'selesai' && b.status !== 'selesai') return 1;
+        if (a.status !== 'selesai' && b.status === 'selesai') return -1;
+        return 0;
+      });
+      setLaporan(sortedData);
+    })
+    .catch(err => console.error(err));
+}, []);
+
 
   const handleStatusChange = async (id, status) => {
-    try {
-      await axios.post(`http://localhost:3001/api/laporan/${id}/status`, { status });
-      const res = await axios.get("http://localhost:3001/api/laporan");
-      setLaporan(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  try {
+    console.log('Update status:', id, status); // Cek data
+    const response = await axios.post(`http://localhost:3001/laporan/${id}/status`, { status });
+    console.log('Response:', response.data);
+    
+    const res = await axios.get("http://localhost:3001/laporan");
+    setLaporan(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+  const res = await axios.get("http://localhost:3001/laporan");
+  const sortedData = res.data.sort((a, b) => {
+    if (a.status === 'selesai' && b.status !== 'selesai') return 1;
+    if (a.status !== 'selesai' && b.status === 'selesai') return -1;
+    return 0;
+  });
+  setLaporan(sortedData);
+};
+
 
   const handlePrint = (id) => {
     navigate(`/LaporanDetail/${id}`); 
@@ -30,10 +51,47 @@ const LaporanList = () => {
   return (
     <div className="d-flex">
       <div className="sidebar">
-        <img src="/images/logo-admin.png" alt="Logo" className="sidebar-logo" />
-        <a href="/admin-dashboard">Dashboard</a>
-        <a href="/laporan_list" className="active">Daftar Laporan</a>
-        <a href="/login">Logout</a>
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            📊
+          </div>
+          <div className="sidebar-title">Admin Panel</div>
+          <div className="sidebar-subtitle">Dashboard</div>
+        </div>
+        
+        <nav className="sidebar-nav">
+          <a href="./admin-dashboard">
+            <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Dashboard
+          </a>
+
+            <Link to="/laporan_list" className="active">
+            <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10,9 9,9 8,9"/>
+            </svg>
+            Daftar Laporan
+            </Link>
+        </nav>
+        
+        <div className="sidebar-logout">
+          <a href="./admin">
+            <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16,17 21,12 16,7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Logout
+          </a>
+        </div>
       </div>
 
       <div className="content">
@@ -45,6 +103,7 @@ const LaporanList = () => {
               <tr>
                 <th className="text-center">No</th>
                 <th className="text-center">Tanggal</th>
+                <th className="text-center">Judul</th>
                 <th className="text-center">Kategori</th>
                 <th className="text-center">Status Kasus</th>
                 <th className="text-center">Aksi</th>
@@ -62,12 +121,14 @@ const LaporanList = () => {
                       year: 'numeric'
                     })}
                   </td>
+                  <td className="text-center">{row.judul}</td>
                   <td className="text-center">{row.kategori}</td>
                   <td className="text-center">
                     <select
                       className="custom-select"
                       value={row.status}
                       onChange={(e) => handleStatusChange(row.id, e.target.value)}
+                      disabled={row.status === 'selesai'}
                     >
                       <option value="dikaji">Dikaji</option>
                       <option value="diselidiki">Diselidiki</option>
@@ -75,10 +136,11 @@ const LaporanList = () => {
                     </select>
                   </td>
                   <td className="text-center">
-                    <button className="print-button" onClick={() => handlePrint(row.id)}>
+                    <button type="button" className="print-button" onClick={() => handlePrint(row.id)}>
                       <i className="fas fa-print"></i> Print
                     </button>
                   </td>
+
                 </tr>
               ))}
             </tbody>
