@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../assets/css/AdminDashboard.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"; 
+import LogoLight from '../assets/img/logolight.png'; 
 
 
 const AdminDashboard = () => {
@@ -38,13 +39,13 @@ const AdminDashboard = () => {
     });
   };
 
-  const getPriorityClass = (prioritas) => {
-    return `priority-${prioritas}`;
-  };
+  // const getPriorityClass = (prioritas) => {
+  //   return `priority-${prioritas}`;
+  // };
 
-  const getPriorityDotClass = (prioritas) => {
-    return `dot-${prioritas}`;
-  };
+  // const getPriorityDotClass = (prioritas) => {
+  //   return `dot-${prioritas}`;
+  // };
   
   const navigate = useNavigate();
   const handlePrint = (id) => {
@@ -56,14 +57,7 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-            </svg>
-          </div>
+          <img src={LogoLight} alt="logo"/>
           <div className="sidebar-title">Admin Panel</div>
           <div className="sidebar-subtitle">Dashboard</div>
         </div>
@@ -207,7 +201,7 @@ const AdminDashboard = () => {
                       <div className="laporan-header">
                         <div style={{ flex: 1 }}>
                           <h4 className="laporan-title">{laporan.judul}</h4>
-                          <p>Status: <strong>{laporan.status || 'Belum Ada'}</strong></p>
+                          <p className="laporan-status">Status: <strong>{laporan.status || 'Belum Ada'}</strong></p>
                           
                           <div className="laporan-meta">
                             <div className="meta-item">

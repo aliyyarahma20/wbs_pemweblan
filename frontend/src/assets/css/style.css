@@ -29,11 +29,12 @@ p {
     font-size: 15px;
 }
 
-.form-logo {
-    height: 70px;
+.container img {
     display: block;
     margin-left: 10px; /* posisi ke kiri */
     margin-bottom: 20px;
+    width: 280px; /* Adjust this value to your desired smaller size, e.g., 40px, 50px */
+    height: auto; /* Keeps the aspect ratio intact */
 }
 
 form {

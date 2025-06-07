@@ -3,6 +3,7 @@ import axios from "axios";
 import "../assets/css/laporan_list.css"; // Import CSS file
 import { useNavigate } from "react-router-dom"; 
 import { Link } from 'react-router-dom';
+import LogoLight from '../assets/img/logolight.png'; 
 
 const LaporanList = () => {
   const [laporan, setLaporan] = useState([]);
@@ -52,9 +53,7 @@ const LaporanList = () => {
     <div className="d-flex">
       <div className="sidebar">
         <div className="sidebar-header">
-          <div className="sidebar-logo">
-            📊
-          </div>
+          <img src={LogoLight} alt="logo"/>
           <div className="sidebar-title">Admin Panel</div>
           <div className="sidebar-subtitle">Dashboard</div>
         </div>

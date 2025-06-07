@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/css/style.css';
 import axios from 'axios'; 
+import LogoLight from '../assets/img/logodark.png'; 
 
 function FormLaporan() {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ function FormLaporan() {
 
   return (
     <div className="container mt-5">
-      <img src="/images/logo.png" alt="Logo" className="form-logo" />
+      <img src={LogoLight} alt="logo"/>
       <h2><strong>WBS (Whistleblowing System) - Bersama Jaga Integritas</strong></h2>
       <p className="lead">Silakan isi form di bawah ini untuk melaporkan kejadian yang mencurigakan.</p>
 
