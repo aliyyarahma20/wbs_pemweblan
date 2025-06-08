@@ -112,6 +112,7 @@ body {
     padding: 2rem;
 }
 
+/* Sidebar navigation links - KEEPING HOVER EFFECTS */
 .sidebar a {
     display: flex;
     align-items: center;
@@ -161,7 +162,7 @@ body {
     width: 22px;
     height: 22px;
     fill: currentColor;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; /* Keep transition for scale effect */
 }
 
 .sidebar a:hover .sidebar-icon {
@@ -175,12 +176,12 @@ body {
     right: 2rem;
 }
 
+/* Sidebar logout link - KEEPING HOVER EFFECTS */
 .sidebar-logout a:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
     color: white;
     box-shadow: 0 4px 20px rgba(220, 38, 38, 0.3);
 }
-
 
 /* Enhanced Content Area */
 .content {
@@ -202,6 +203,7 @@ body {
     position: relative;
 }
 
+/* REMOVED table-responsive::before HOVER/SHIMMER EFFECT */
 .table-responsive::before {
     content: '';
     position: absolute;
@@ -211,6 +213,7 @@ body {
     bottom: 0;
     background: linear-gradient(135deg, rgba(10, 31, 68, 0.02) 0%, transparent 50%);
     pointer-events: none;
+    /* Removed animation property here */
 }
 
 .table-scroll {
@@ -227,6 +230,7 @@ body {
     border-radius: 4px;
 }
 
+/* Scrollbar thumb hover - KEEPING HOVER EFFECT for usability */
 .table-scroll::-webkit-scrollbar-thumb {
     background: var(--gray-300);
     border-radius: 4px;
@@ -274,7 +278,7 @@ body {
     letter-spacing: 0.05em;
     position: relative;
     border: none;
-    transition: var(--transition);
+    transition: var(--transition); /* Keep transition for general styling */
 }
 
 .custom-headers th:first-child {
@@ -285,6 +289,7 @@ body {
     border-top-right-radius: var(--border-radius-lg);
 }
 
+/* REMOVED custom-headers th::before and hover */
 .custom-headers th::before {
     content: '';
     position: absolute;
@@ -293,21 +298,15 @@ body {
     width: 0;
     height: 2px;
     background: var(--white);
-    transition: var(--transition);
+    /* Removed transition property here, no longer needed as width is 0 */
     transform: translateX(-50%);
+    display: none; /* Hide by default if not needed, or remove completely */
 }
 
-.custom-headers th:hover::before {
-    width: 80%;
-}
-
-.custom-headers th:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Enhanced Table Body */
+/* REMOVED .custom-headers th:hover::before */
+/* REMOVED table row hover effects that cause glitches */
 .table tbody tr {
-    transition: var(--transition);
+    transition: none; /* Remove transition */
     position: relative;
 }
 
@@ -319,22 +318,16 @@ body {
     bottom: 0;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--gray-200), transparent);
+    /* Removed transition property here */
 }
 
 .table tbody tr:last-child::after {
     display: none;
 }
 
-.table tbody tr:hover {
-    background: linear-gradient(135deg, rgba(10, 31, 68, 0.02) 0%, rgba(59, 130, 246, 0.02) 100%);
-    transform: scale(1.005);
-    box-shadow: inset 0 0 0 1px rgba(10, 31, 68, 0.08);
-}
-
-.table tbody tr:hover::after {
-    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
-    height: 2px;
-}
+/* REMOVED .table tbody tr:hover */
+/* REMOVED .table tbody tr:hover::after */
+/* REMOVED .table tbody tr:nth-child(even):hover */
 
 .table td {
     text-align: center;
@@ -343,16 +336,13 @@ body {
     font-weight: 500;
     border: none;
     position: relative;
-    transition: var(--transition);
+    transition: none; /* Remove transition */
 }
 
 .table tbody tr:nth-child(even) {
     background: rgba(248, 249, 250, 0.5);
 }
 
-.table tbody tr:nth-child(even):hover {
-    background: linear-gradient(135deg, rgba(10, 31, 68, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
-}
 
 /* Enhanced Controls Section */
 .table-controls {
@@ -368,7 +358,7 @@ body {
     border: 1px solid var(--gray-200);
 }
 
-/* Enhanced Select Dropdown */
+/* Enhanced Select Dropdown - KEEPING HOVER EFFECTS */
 .custom-select {
     appearance: none;
     -webkit-appearance: none;
@@ -419,7 +409,7 @@ body {
     color: var(--white) !important;
 }
 
-/* Enhanced Print Button */
+/* Enhanced Print Button - KEEPING ALL HOVER EFFECTS */
 .print-button {
     display: inline-flex;
     align-items: center;
@@ -524,6 +514,7 @@ body {
     overflow: hidden;
 }
 
+/* REMOVED table-loading::after shimmer animation */
 .table-loading::after {
     content: '';
     position: absolute;
@@ -532,17 +523,10 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-    animation: shimmer 1.5s infinite;
+    /* Removed animation property here */
 }
 
-@keyframes shimmer {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
+/* @keyframes shimmer - No longer needed if not used */
 
 /* Empty State */
 .table-empty {
