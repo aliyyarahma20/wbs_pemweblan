@@ -188,7 +188,7 @@ const AdminDashboard = () => {
                 <p className="inbox-subtitle">Laporan yang perlu ditinjau segera</p>
               </div>
               <span className="inbox-badge">
-                {laporanBaru?.length || 0} Laporan Baru
+                {laporanBaru.filter(laporan => laporan.status === 'dikaji').length || 0} Laporan Baru
               </span>
             </div>
             
