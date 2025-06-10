@@ -403,11 +403,11 @@ body {
     font-weight: 500;
 }
 
-.custom-select option:checked,
+/* .custom-select option:checked,
 .custom-select option:hover {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%) !important;
     color: var(--white) !important;
-}
+} */
 
 /* Enhanced Print Button - KEEPING ALL HOVER EFFECTS */
 .print-button {
