@@ -23,27 +23,50 @@ const LaporanList = () => {
     .catch(err => console.error(err));
 }, []);
 
-
   const handleStatusChange = async (id, status) => {
-  try {
-    console.log('Update status:', id, status); // Cek data
-    const response = await axios.post(`http://localhost:3001/laporan/${id}/status`, { status });
-    console.log('Response:', response.data);
-    
+    try {
+      console.log('Update status:', id, status); // Cek data
+      const response = await axios.post(`http://localhost:3001/laporan/${id}/status`, { status });
+      console.log('Response:', response.data);
+      
+      const res = await axios.get("http://localhost:3001/laporan");
+      setLaporan(res.data);
+    } catch (err) {
+      console.error(err);
+    }
     const res = await axios.get("http://localhost:3001/laporan");
-    setLaporan(res.data);
-  } catch (err) {
-    console.error(err);
-  }
-  const res = await axios.get("http://localhost:3001/laporan");
-  const sortedData = res.data.sort((a, b) => {
-    if (a.status === 'selesai' && b.status !== 'selesai') return 1;
-    if (a.status !== 'selesai' && b.status === 'selesai') return -1;
-    return 0;
-  });
-  setLaporan(sortedData);
-};
+    const sortedData = res.data.sort((a, b) => {
+      if (a.status === 'selesai' && b.status !== 'selesai') return 1;
+      if (a.status !== 'selesai' && b.status === 'selesai') return -1;
+      return 0;
+    });
+    setLaporan(sortedData);
+  };
 
+  const handleDelete = async (id, judul) => {
+    // Konfirmasi delete
+    const confirmDelete = window.confirm(`Apakah Anda yakin ingin menghapus laporan "${judul}"?`);
+    
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:3001/laporan/${id}`);
+        
+        // Refresh data setelah delete
+        const res = await axios.get("http://localhost:3001/laporan");
+        const sortedData = res.data.sort((a, b) => {
+          if (a.status === 'selesai' && b.status !== 'selesai') return 1;
+          if (a.status !== 'selesai' && b.status === 'selesai') return -1;
+          return 0;
+        });
+        setLaporan(sortedData);
+        
+        alert('Laporan berhasil dihapus!');
+      } catch (err) {
+        console.error('Error deleting laporan:', err);
+        alert('Gagal menghapus laporan. Silakan coba lagi.');
+      }
+    }
+  };
 
   const handlePrint = (id) => {
     navigate(`/LaporanDetail/${id}`); 
@@ -135,13 +158,39 @@ const LaporanList = () => {
                     </select>
                   </td>
                   <td className="text-center">
-                    <button type="button" className="print-button" onClick={() => handlePrint(row.id)}>
-                      <svg style={{width: '16px', height: '16px', marginRight: '8px'}} fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7.828A2 2 0 0017.414 7L13 2.586A2 2 0 0011.586 2H4zm9 1.414L16.586 7H13a1 1 0 01-1-1V3.414z" />
-                      </svg> Detail
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                      <button type="button" className="print-button" onClick={() => handlePrint(row.id)}>
+                        <svg style={{width: '16px', height: '16px', marginRight: '8px'}} fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7.828A2 2 0 0017.414 7L13 2.586A2 2 0 0011.586 2H4zm9 1.414L16.586 7H13a1 1 0 01-1-1V3.414z" />
+                        </svg> Detail
+                      </button>
+                      
+                      <button 
+                        type="button" 
+                        className="delete-button" 
+                        onClick={() => handleDelete(row.id, row.judul)}
+                        style={{
+                          backgroundColor: '#dc3545',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 12px',
+                          borderRadius: '30px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => e.target.style.backgroundColor = '#c82333'}
+                        onMouseOut={(e) => e.target.style.backgroundColor = '#dc3545'}
+                      >
+                        <svg style={{width: '16px', height: '16px', marginRight: '8px'}} fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        Hapus
+                      </button>
+                    </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>

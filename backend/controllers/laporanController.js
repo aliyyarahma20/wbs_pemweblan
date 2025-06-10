@@ -31,11 +31,10 @@ exports.submitLaporan = async (req, res) => {
     await conn.beginTransaction();
 
     const [result] = await conn.query(`
-      INSERT INTO laporan 
-      (kategori, judul, isi, bukti, tanggal, lokasi, nama, kontak, anonim) 
+      INSERT INTO laporan
+      (kategori, judul, isi, bukti, tanggal, lokasi, nama, kontak, anonim)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [ kategori, judul, isi, buktiBuffer, tanggal, lokasi, nama, kontak, (!nama || nama.trim() === '' || anonim === 'on') ? 1 : 0 ]
-
+      [ kategori, judul, isi, buktiBuffer, tanggal, lokasi, nama, kontak, (!nama || nama.trim() === '' || anonim === 'on') ? 1 : 0 ]
     );
 
     const insertId = result.insertId;
@@ -61,7 +60,7 @@ exports.submitLaporan = async (req, res) => {
 exports.getAllLaporan = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT 
+      SELECT
         laporan.id,
         laporan.kategori,
         laporan.judul,
@@ -124,7 +123,7 @@ exports.getLaporanById = async (req, res) => {
   const { id } = req.params;
   try {
     const [rows] = await db.query(`
-      SELECT 
+      SELECT
         laporan.id,
         laporan.kategori,
         laporan.judul,
@@ -154,5 +153,34 @@ exports.getLaporanById = async (req, res) => {
   } catch (err) {
     console.error('Gagal mengambil detail laporan:', err);
     res.status(500).json({ error: 'Terjadi kesalahan saat mengambil laporan.' });
+  }
+};
+
+exports.deleteLaporan = async (req, res) => {
+  const { id } = req.params;
+  const conn = await db.getConnection(); // Get a connection from the pool
+  try {
+    await conn.beginTransaction(); // Start a transaction
+
+    // First, delete related entries in status_kasus table
+    // This is important because status_kasus likely has a foreign key to laporan.
+    await conn.query('DELETE FROM status_kasus WHERE id_laporan = ?', [id]);
+
+    // Then, delete the report from the laporan table
+    const [result] = await conn.query('DELETE FROM laporan WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      await conn.rollback(); // Rollback if no row was deleted (report not found)
+      return res.status(404).json({ error: 'Laporan tidak ditemukan.' });
+    }
+
+    await conn.commit(); // Commit the transaction
+    res.json({ message: 'Laporan berhasil dihapus.' });
+  } catch (err) {
+    await conn.rollback(); // Rollback on error
+    console.error('Gagal menghapus laporan:', err);
+    res.status(500).json({ error: 'Terjadi kesalahan saat menghapus laporan.' });
+  } finally {
+    conn.release(); // Release the connection back to the pool
   }
 };
