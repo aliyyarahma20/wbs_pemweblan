@@ -49,8 +49,11 @@ function FormLaporan() {
         'Content-Type': 'multipart/form-data',
       },
     });
+    console.log("RESPON SERVER:", response.data);
 
-    alert("Laporan Anda telah diterima, terima kasih sudah melapor.");
+    const laporanId = response.data.id;
+    alert(`✅ Laporan Anda telah terkirim dengan ID ${laporanId}`);
+
     console.log(response.data);
 
     // Reset form setelah berhasil

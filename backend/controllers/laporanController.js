@@ -37,6 +37,7 @@ exports.submitLaporan = async (req, res) => {
       [ kategori, judul, isi, buktiBuffer, tanggal, lokasi, nama, kontak, (!nama || nama.trim() === '' || anonim === 'on') ? 1 : 0 ]
     );
 
+    console.log('Hasil INSERT:', result);
     const insertId = result.insertId;
 
     await conn.query(`
@@ -45,7 +46,7 @@ exports.submitLaporan = async (req, res) => {
 
     await conn.commit();
 
-    res.status(201).json({ message: 'Laporan berhasil disimpan.' });
+    res.status(201).json({ message: 'Laporan berhasil disimpan.', id: insertId });
 
   } catch (err) {
     await conn.rollback();
@@ -69,7 +70,7 @@ exports.getAllLaporan = async (req, res) => {
         laporan.lokasi,
         IF(laporan.anonim = 1, 'Anonim', laporan.nama) AS nama,
         laporan.anonim,
-        status.status
+        status.status 
     FROM laporan
     LEFT JOIN status_kasus AS status ON status.id_laporan = laporan.id
     ORDER BY laporan.tanggal DESC

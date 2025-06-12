@@ -1,0 +1,112 @@
+.dashboard-user {
+  padding: 60px 500px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fb;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-title {
+  text-align: center;
+  color: #1e3a59;
+  font-size: 36px;
+  margin-bottom: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.btn-tambah {
+  display: inline-block;
+  background-color: #0a3252;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 25px;
+}
+
+.btn-tambah:hover {
+  background-color: #326190;
+  transform: scale(1.03);
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background: white;
+}
+
+.laporan-table {
+  width: 100%;
+  min-width: 900px;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.laporan-table th,
+.laporan-table td {
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid #f2f2f3;
+}
+
+.laporan-table th {
+  background-color: #0a3252;
+  color: #eef1f3;
+  font-weight: 650;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.laporan-table tbody tr:hover {
+  background-color: #cfe1f4;
+  transition: background-color 0.3s ease;
+}
+
+/* 🌸 Status Badges - Clean Style Without Icons */
+.status {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: capitalize;
+  line-height: 1;
+  min-width: 100px;
+  text-align: center;
+  margin: auto;
+}
+
+
+
+.status.dikaji {
+  background-color: #0a3252;
+  color: #f4f5f6;
+}
+
+.status.diselidiki {
+  background-color: #0a3252;
+  color: #f5f7f5;
+}
+
+.status.selesai {
+  background-color: #0a3252;
+  color: #fafbfa;
+}
+
+.laporan-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.laporan-table tbody tr:nth-child(even) {
+  background-color: #f4f6f8;
+}
